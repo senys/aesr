@@ -19,6 +19,8 @@ func make_iv() []byte {
 	return randomByteSecure(16)
 }
 
+
+
 // Encrypt returns encryptedReader AESCTRmode using `key`. `key` is []byte(length 32).
 // Encrypt generates IV automatically.
 // Returned reader has IV as first 16 bytes.
@@ -46,7 +48,10 @@ func Decrypt(src io.Reader, key []byte) (io.Reader, error) {
 		return nil, err
 	}
 	iv := make([]byte, 16)
-	n, _ := src.Read(iv)
+	n, err := src.Read(iv)
+	if err != nil {
+		return nil, err
+	}
 	if n != 16 {
 		return nil, fmt.Errorf("noIV")
 	}
